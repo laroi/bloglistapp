@@ -1,13 +1,23 @@
 import React, {useState} from 'react'
-const Details = ({url, id, user, likes, isVisible, handleLike, handleDelete}) => {
+const username = JSON.parse(localStorage.getItem('user')).username
+
+const delButton = (inUsername, handleDelete, id, title) => {
+
+    if (username === inUsername) {
+        return (<button onClick={handleDelete(id, title)}>Delete</button>)
+    }
+    return null;
+    
+}
+const Details = ({url, id, user, likes, isVisible, handleLike, title, handleDelete}) => {
     if (isVisible) {
-        const {name=''} = user;
+        const {name='', username} = user;
         return (
             <div>
                 <div><a href={url}>{url}</a></div>
                 <div>{likes} likes <button onClick={handleLike(id)}>Like</button></div>
                 <div>added by {name}</div>
-                <button onClick={handleDelete(id)}>Delete</button>
+                {delButton(username, handleDelete, id, title)}
             </div>
         )
     }
@@ -28,7 +38,7 @@ const Blog = ({ blog, handleLike , handleDelete}) => {
             <div onClick={() => setIsVisible(!isVisible)}>
                 {blog.title} {blog.author}
             </div>
-            <Details url={blog.url} user={blog.user || {}} likes={blog.likes} id={blog.id} isVisible={isVisible} handleDelete={handleDelete} handleLike={handleLike} />
+            <Details url={blog.url} title={blog.title} user={blog.user || {}} likes={blog.likes} id={blog.id} isVisible={isVisible} handleDelete={handleDelete} handleLike={handleLike} />
         </div>
     )
 }

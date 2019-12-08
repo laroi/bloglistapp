@@ -124,15 +124,17 @@ function App() {
             }
         }
     }
-    const handleDelete = (id) => {
-        return async() => {  
-            try {
-                await blogService.deletePost(id);
-                const index = blogs.findIndex(x=>x.id===id);
-                blogs.splice(index, 1);
-                setBlogs([...blogs].sort((a, b) => { if (a.likes < b.likes) {return 1; }else{ return -1;}}  ));
-            } catch (e) {
-                console.log(e);
+    const handleDelete = (id, title) => {
+        return async() => { 
+            if (window.confirm(`Do you really want to delete ${title} ?`)) {
+                try {
+                    await blogService.deletePost(id);
+                    const index = blogs.findIndex(x=>x.id===id);
+                    blogs.splice(index, 1);
+                    setBlogs([...blogs].sort((a, b) => { if (a.likes < b.likes) {return 1; }else{ return -1;}}  ));
+                } catch (e) {
+                    console.log(e);
+            }
             }
         }
     }
