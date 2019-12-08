@@ -26,7 +26,30 @@ const loginForm = (handleLogin, username, setUsername, password, setPassword) =>
         <button type="submit">login</button>
     </form>
 )
+  const addForm = (handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuthor, newUrl, setNewUrl) => {
+      return (
+          <div>
+          <h1>Add New</h1>
+          <form onSubmit={handleSubmit}>
+            <div>
+              title: <input value={newTitle} onChange={(e)=>{setNewTitle(e.target.value.trim());}}/>
+          </div>
+          <div>
+              author: <input value={newAuthor} onChange={(e)=>{setNewAuthor(e.target.value.trim());}}/>
 
+            </div>
+          <div>
+              url: <input value={newUrl} onChange={(e)=>{setNewUrl(e.target.value.trim());}}/>
+
+            </div>
+
+            <div>
+              <button type="submit">add</button>
+            </div>
+          </form>
+          </div>
+      )
+  };
 const blogForm = (blogs, user, handleLogout)=>{
     const {name = ''} = user;
    return  (
@@ -43,7 +66,20 @@ function App() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-
+    const [newTitle, setNewTitle] = useState('');
+    const [newAuthor, setNewAuthor] = useState('');
+    const [newUrl, setNewUrl] = useState('');
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+        const blgObj = await blogService.createNew({title: newTitle, author: newAuthor, url: newUrl});
+            setNewTitle('');
+            setNewAuthor('');
+            setNewUrl('');
+            setBlogs([...blogs, blgObj])
+        } catch (e) {
+        }
+    }
     const handleLogin = async (event) => {
         event.preventDefault()
         try {
@@ -63,20 +99,25 @@ function App() {
     }
     const handleLogout = ()=> {
         localStorage.removeItem('user');
-        setUser({});
+        setUsername('')
+        setPassword('');
+        setUser(null);
 
     }
     useEffect(() => {
             const user = JSON.parse(localStorage.getItem('user'));
             setUser(user);
+
             blogService
             .getAll().then(blogs => {
                 setBlogs(blogs)
             })
-    });
+
+    }, []);
     return (
         <div className="App">
         {user !== null && blogForm(blogs, user, handleLogout)}
+        {user !== null && addForm(handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuthor, newUrl, setNewUrl)}
         {user === null && loginForm(handleLogin, username, setUsername, password, setPassword)}
 
 
