@@ -88,7 +88,7 @@ function App() {
             setNewTitle('');
             setNewAuthor('');
             setNewUrl('');
-            setBlogs([...blogs, blgObj])
+            setBlogs([...blogs, blgObj].sort((a, b) => { if (a.likes < b.likes) {return 1; }else{ return -1;}}  ))
             setTimeout(()=> {setNotification(null)}, 5000)
 
         } catch (e) {
@@ -112,15 +112,15 @@ function App() {
         }
     }
     const handleLike = (id) => {
+        return async() => {  
         const index = blogs.findIndex(x=>x.id===id);
         blogs[index].likes += 1;
-        return async() => {  
+
             try {
-                await blogService.updateLike(id, blogs[index].likes);
-                console.log(blogs[index].likes, blogs);
-                setBlogs([...blogs]);
+                await blogService.updateLike(id, blogs[index].likes);               
+                setBlogs([...blogs].sort((a, b) => { if (a.likes < b.likes) {return 1; }else{ return -1;}}  ));
             } catch (e) {
-                console.log(error);
+                console.log(e);
             }
         }
     }
@@ -137,6 +137,7 @@ function App() {
 
             blogService
             .getAll().then(blogs => {
+                blogs = blogs.sort((a, b) => { if (a.likes < b.likes) {return 1; }else{ return -1;}}  )
                 setBlogs(blogs)
             })
 
