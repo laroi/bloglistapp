@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Blog from './components/Blog';
 import blogService from './services/blogs'
 import loginService from './services/login'
+import AddForm from './components/AddForm';
+import Togglable from './components/Togglable';
 
 const loginForm = (handleLogin, username, setUsername, password, setPassword) => (
     <form onSubmit={handleLogin}>
@@ -51,30 +53,6 @@ const Notification = ({ message, error }) => {
   )
 }
 
-  const addForm = (handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuthor, newUrl, setNewUrl) => {
-      return (
-          <div>
-          <h1>Add New</h1>
-          <form onSubmit={handleSubmit}>
-            <div>
-              title: <input value={newTitle} onChange={(e)=>{setNewTitle(e.target.value.trim());}}/>
-          </div>
-          <div>
-              author: <input value={newAuthor} onChange={(e)=>{setNewAuthor(e.target.value.trim());}}/>
-
-            </div>
-          <div>
-              url: <input value={newUrl} onChange={(e)=>{setNewUrl(e.target.value.trim());}}/>
-
-            </div>
-
-            <div>
-              <button type="submit">add</button>
-            </div>
-          </form>
-          </div>
-      )
-  };
 const blogForm = (blogs, user, handleLogout)=>{
     const {name = ''} = user;
    return  (
@@ -85,6 +63,12 @@ const blogForm = (blogs, user, handleLogout)=>{
     </div>
 )
 }
+const getTogglable = (handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuthor, newUrl, setNewUrl) => (
+    <Togglable buttonLabel="new blog">
+            <AddForm handleSubmit={handleSubmit} newTitle={newTitle} setNewTitle={setNewTitle} newAuthor={newAuthor} setNewAuthor={setNewAuthor} newUrl={newUrl} setNewUrl={setNewUrl}/>
+    </Togglable>
+
+)
 function App() {
     const [blogs, setBlogs] = useState([]);
     const [user, setUser] = useState(null);
@@ -150,7 +134,7 @@ function App() {
         <Notification message={error} error/>
 
         {user !== null && blogForm(blogs, user, handleLogout)}
-        {user !== null && addForm(handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuthor, newUrl, setNewUrl)}
+        {user !== null && getTogglable(handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuthor, newUrl, setNewUrl)}
         {user === null && loginForm(handleLogin, username, setUsername, password, setPassword)}
 
 
