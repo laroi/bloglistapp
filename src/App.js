@@ -26,6 +26,31 @@ const loginForm = (handleLogin, username, setUsername, password, setPassword) =>
         <button type="submit">login</button>
     </form>
 )
+const Notification = ({ message, error }) => {
+  if (message === null) {
+    return null
+  }
+  const notice = {
+      background: 'lightgrey',
+      fontSize: 20,
+      borderStyle: 'solid',
+      borderRadius: 5,
+      padding: 10,
+      marginBottom: 10,
+  }
+  let styleObj = {};
+  if (error) {
+      styleObj = {...notice, color:'red'}
+  } else {
+      styleObj = {...notice, color: 'green'}
+  }
+  return (
+    <div style={styleObj}>
+      {message}
+    </div>
+  )
+}
+
   const addForm = (handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuthor, newUrl, setNewUrl) => {
       return (
           <div>
@@ -65,19 +90,26 @@ function App() {
     const [user, setUser] = useState(null);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
     const [newTitle, setNewTitle] = useState('');
     const [newAuthor, setNewAuthor] = useState('');
     const [newUrl, setNewUrl] = useState('');
+    const [error, setError ] = useState(null);
+    const [notification, setNotification] = useState(null);
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
         const blgObj = await blogService.createNew({title: newTitle, author: newAuthor, url: newUrl});
+            setNotification(`A new blog ${newTitle} by ${newAuthor} is added `)
             setNewTitle('');
             setNewAuthor('');
             setNewUrl('');
             setBlogs([...blogs, blgObj])
+            setTimeout(()=> {setNotification(null)}, 5000)
+
         } catch (e) {
+            setError(`${e.response.data.error}`);
+            setTimeout(()=> {setError(null)}, 5000)
         }
     }
     const handleLogin = async (event) => {
@@ -91,10 +123,8 @@ function App() {
             setUsername('')
             setPassword('')
         } catch (exception) {
-            setErrorMessage('Wrong credentials')
-            setTimeout(() => {
-                setErrorMessage(null)
-            }, 5000)
+            setError(`user name or password is invalid`);
+            setTimeout(()=> {setError(null)}, 5000)
         }
     }
     const handleLogout = ()=> {
@@ -116,6 +146,9 @@ function App() {
     }, []);
     return (
         <div className="App">
+        <Notification message={notification}/>
+        <Notification message={error} error/>
+
         {user !== null && blogForm(blogs, user, handleLogout)}
         {user !== null && addForm(handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuthor, newUrl, setNewUrl)}
         {user === null && loginForm(handleLogin, username, setUsername, password, setPassword)}
