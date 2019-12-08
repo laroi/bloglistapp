@@ -27,12 +27,16 @@ const loginForm = (handleLogin, username, setUsername, password, setPassword) =>
     </form>
 )
 
-const blogForm = (blogs)=> (
+const blogForm = (blogs, user, handleLogout)=>{
+    const {name = ''} = user;
+   return  (
     <div>
         <h2>blogs</h2>
+        <span>{`${name} logged in`} <button onClick={handleLogout}>logout</button> </span>
         {blogs.map(x=><Blog key={x.id} blog={x}/>)}
     </div>
 )
+}
 function App() {
     const [blogs, setBlogs] = useState([]);
     const [user, setUser] = useState(null);
@@ -47,6 +51,7 @@ function App() {
                 username, password,
             })
             setUser(user)
+            localStorage.setItem('user', JSON.stringify(user));
             setUsername('')
             setPassword('')
         } catch (exception) {
@@ -56,15 +61,22 @@ function App() {
             }, 5000)
         }
     }
+    const handleLogout = ()=> {
+        localStorage.removeItem('user');
+        setUser({});
+
+    }
     useEffect(() => {
+            const user = JSON.parse(localStorage.getItem('user'));
+            setUser(user);
             blogService
             .getAll().then(blogs => {
                 setBlogs(blogs)
             })
-    }, []);
+    });
     return (
         <div className="App">
-        {user !== null && blogForm(blogs)}
+        {user !== null && blogForm(blogs, user, handleLogout)}
         {user === null && loginForm(handleLogin, username, setUsername, password, setPassword)}
 
 
