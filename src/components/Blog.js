@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-const Details = ({url, id, user, likes, isVisible, handleLike}) => {
+const Details = ({url, id, user, likes, isVisible, handleLike, handleDelete}) => {
     if (isVisible) {
         const {name=''} = user;
         return (
@@ -7,13 +7,14 @@ const Details = ({url, id, user, likes, isVisible, handleLike}) => {
                 <div><a href={url}>{url}</a></div>
                 <div>{likes} likes <button onClick={handleLike(id)}>Like</button></div>
                 <div>added by {name}</div>
+                <button onClick={handleDelete(id)}>Delete</button>
             </div>
         )
     }
     return null;
 
 }
-const Blog = ({ blog, handleLike }) => {
+const Blog = ({ blog, handleLike , handleDelete}) => {
     const [isVisible, setIsVisible] = useState(false);
     const blogStyle = {
         paddingTop: 10,
@@ -27,7 +28,7 @@ const Blog = ({ blog, handleLike }) => {
             <div onClick={() => setIsVisible(!isVisible)}>
                 {blog.title} {blog.author}
             </div>
-            <Details url={blog.url} user={blog.user || {}} likes={blog.likes} id={blog.id} isVisible={isVisible} handleLike={handleLike} />
+            <Details url={blog.url} user={blog.user || {}} likes={blog.likes} id={blog.id} isVisible={isVisible} handleDelete={handleDelete} handleLike={handleLike} />
         </div>
     )
 }
