@@ -1,11 +1,11 @@
 import React, {useState} from 'react'
-const Details = ({url, user, likes, isVisible}) => {
+const Details = ({url, id, user, likes, isVisible, handleLike}) => {
     if (isVisible) {
         const {name=''} = user;
         return (
             <div>
                 <div><a href={url}>{url}</a></div>
-                <div>{likes} likes <button>Like</button></div>
+                <div>{likes} likes <button onClick={handleLike(id)}>Like</button></div>
                 <div>added by {name}</div>
             </div>
         )
@@ -13,7 +13,7 @@ const Details = ({url, user, likes, isVisible}) => {
     return null;
 
 }
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleLike }) => {
     const [isVisible, setIsVisible] = useState(false);
     const blogStyle = {
         paddingTop: 10,
@@ -22,13 +22,12 @@ const Blog = ({ blog }) => {
         borderWidth: 1,
         marginBottom: 5
     }
-
     return (
         <div style={blogStyle}>
             <div onClick={() => setIsVisible(!isVisible)}>
                 {blog.title} {blog.author}
             </div>
-            <Details url={blog.url} user={blog.user || {}} likes={blog.likes} isVisible={isVisible}/>
+            <Details url={blog.url} user={blog.user || {}} likes={blog.likes} id={blog.id} isVisible={isVisible} handleLike={handleLike} />
         </div>
     )
 }

@@ -11,5 +11,10 @@ const createNew = (data) => {
     const request = axios.post(baseUrl, data, {headers: {authorization: `bearer ${token}`}});
     return request.then(response => response.data);
 };
+const updateLike = (id, like) => {
+    const token = JSON.parse(localStorage.getItem('user')).token
 
-export default { getAll, createNew };
+    const request = axios.put(`${baseUrl}/${id}`, {likes: like},  {headers: {authorization: `bearer ${token}`}});
+    return request.then(response=> response.data)
+}
+export default { getAll, createNew, updateLike };

@@ -53,13 +53,13 @@ const Notification = ({ message, error }) => {
   )
 }
 
-const blogForm = (blogs, user, handleLogout)=>{
+const blogForm = (blogs, handleLike, user, handleLogout)=>{
     const {name = ''} = user;
    return  (
     <div>
         <h2>blogs</h2>
         <span>{`${name} logged in`} <button onClick={handleLogout}>logout</button> </span>
-        {blogs.map(x=><Blog key={x.id} blog={x}/>)}
+        {blogs.map(x=><Blog key={x.id} blog={x} handleLike={handleLike}/>)}
     </div>
 )
 }
@@ -111,6 +111,19 @@ function App() {
             setTimeout(()=> {setError(null)}, 5000)
         }
     }
+    const handleLike = (id) => {
+        const index = blogs.findIndex(x=>x.id===id);
+        blogs[index].likes += 1;
+        return async() => {  
+            try {
+                await blogService.updateLike(id, blogs[index].likes);
+                console.log(blogs[index].likes, blogs);
+                setBlogs([...blogs]);
+            } catch (e) {
+                console.log(error);
+            }
+        }
+    }
     const handleLogout = ()=> {
         localStorage.removeItem('user');
         setUsername('')
@@ -133,7 +146,7 @@ function App() {
         <Notification message={notification}/>
         <Notification message={error} error/>
 
-        {user !== null && blogForm(blogs, user, handleLogout)}
+        {user !== null && blogForm(blogs, handleLike, user, handleLogout)}
         {user !== null && getTogglable(handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuthor, newUrl, setNewUrl)}
         {user === null && loginForm(handleLogin, username, setUsername, password, setPassword)}
 
