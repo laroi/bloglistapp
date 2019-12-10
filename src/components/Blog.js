@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-const username = JSON.parse(localStorage.getItem('user')).username;
+const username = JSON.parse(localStorage.getItem('user') || '{"username":""}').username;
 
 const delButton = (inUsername, handleDelete, id, title) => {
 
@@ -35,7 +35,7 @@ const Blog = ({ blog, handleLike , handleDelete }) => {
     };
     return (
         <div style={blogStyle}>
-            <div onClick={() => setIsVisible(!isVisible)}>
+            <div className='clickable' onClick={() => setIsVisible(!isVisible)}>
                 {blog.title} {blog.author}
             </div>
             <Details url={blog.url} title={blog.title} user={blog.user || {}} likes={blog.likes} id={blog.id} isVisible={isVisible} handleDelete={handleDelete} handleLike={handleLike} />
