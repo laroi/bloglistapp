@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React, {useState} from 'react';
+import PropTypes from 'prop-types';
 const username = JSON.parse(localStorage.getItem('user')).username
 
 const delButton = (inUsername, handleDelete, id, title) => {
@@ -41,5 +42,10 @@ const Blog = ({ blog, handleLike , handleDelete}) => {
             <Details url={blog.url} title={blog.title} user={blog.user || {}} likes={blog.likes} id={blog.id} isVisible={isVisible} handleDelete={handleDelete} handleLike={handleLike} />
         </div>
     )
+}
+Blog.propTypes = {
+    blog: PropTypes.object.isRequired,
+    handleLike: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired
 }
 export default Blog
