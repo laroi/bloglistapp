@@ -1,6 +1,7 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import Togglable from './Togglable'
+import '@testing-library/jest-dom/extend-expect'
 
 describe('<Togglable />', () => {
   let component
@@ -19,7 +20,6 @@ describe('<Togglable />', () => {
 
   test('at start the children are not displayed', () => {
     const div = component.container.querySelector('.togglableContent')
-component.debug()
     expect(div).toHaveStyle('display: none')
   })
 
