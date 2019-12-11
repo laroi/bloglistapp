@@ -6,7 +6,7 @@ import AddForm from './components/AddForm';
 import Togglable from './components/Togglable';
 
 const loginForm = (handleLogin, username, setUsername, password, setPassword) => (
-    <form onSubmit={handleLogin}>
+    <form className="login" onSubmit={handleLogin}>
         <div>
             username
             <input
@@ -53,10 +53,10 @@ const Notification = ({ message, error }) => {
     );
 };
 
-const blogForm = (blogs, handleLike, user, handleLogout, handleDelete) => {
+const blogForm = (blogs, handleLike, user={}, handleLogout, handleDelete) => {
     const { name = '' } = user;
     return  (
-        <div>
+        <div className="blogs">
             <h2>blogs</h2>
             <span>{ `${name} logged in` } <button onClick={ handleLogout }>logout</button> </span>
             { blogs.map(x => <Blog key={ x.id } blog={ x } handleLike={ handleLike } handleDelete={ handleDelete }/>)}
@@ -147,7 +147,13 @@ function App() {
 
     };
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user'));
+        let  user = localStorage.getItem('user');
+        if (user) {
+            user =JSON.parse(user)
+        } else {
+            user = null;
+        }
+        console.log('(*', user)
         setUser(user);
 
         blogService
