@@ -21,4 +21,27 @@ describe('<App />', () => {
 
     // expectations here
   })
+    test('if user is logged, blog is renderd', async () => {
+    const user = {
+      username: 'tester',
+      token: '1231231214',
+      name: 'Donald Tester'
+    }
+
+    localStorage.setItem('user', JSON.stringify(user))
+    const component = render(
+      <App />
+    )
+    component.rerender(<App />)
+
+    await waitForElement(      () =>  component.getByText('blogs') )
+    const el = component.container.querySelector('.blogs');
+    const bEl = component.container.querySelector('.login');
+
+    expect(el).toBeTruthy()
+    expect(bEl).not.toBeTruthy()
+
+    // expectations here
+  })
+
 })
