@@ -4,26 +4,17 @@ import blogService from './services/blogs';
 import loginService from './services/login';
 import AddForm from './components/AddForm';
 import Togglable from './components/Togglable';
+import  { useField } from './hooks';
 
-const loginForm = (handleLogin, username, setUsername, password, setPassword) => (
+const loginForm = (handleLogin, username, password) => (
     <form className="login" onSubmit={handleLogin}>
         <div>
             username
-            <input
-                type="text"
-                value={username}
-                name="Username"
-                onChange={({ target }) => setUsername(target.value)}
-            />
+            <input {...username}  />
         </div>
         <div>
             password
-            <input
-                type="password"
-                value={password}
-                name="Password"
-                onChange={({ target }) => setPassword(target.value)}
-            />
+            <input {...password}  />
         </div>
         <button type="submit">login</button>
     </form>
@@ -72,8 +63,8 @@ const getTogglable = (handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuth
 function App() {
     const [blogs, setBlogs] = useState([]);
     const [user, setUser] = useState(null);
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const username = useField('text');
+    const password = useField('text');
     const [newTitle, setNewTitle] = useState('');
     const [newAuthor, setNewAuthor] = useState('');
     const [newUrl, setNewUrl] = useState('');
@@ -99,13 +90,14 @@ function App() {
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
-            const user = await loginService.login({
-                username, password,
-            });
+            const userVal = username.value;
+            const pasVal = password.value;
+            console.log(userVal, pasVal);
+            const user = await loginService.login({ username: userVal, password: pasVal });
             setUser(user);
             localStorage.setItem('user', JSON.stringify(user));
-            setUsername('');
-            setPassword('');
+
+
         } catch (exception) {
             setError('user name or password is invalid');
             setTimeout(() => { setError(null); }, 5000);
@@ -141,19 +133,16 @@ function App() {
 
     const handleLogout = () => {
         localStorage.removeItem('user');
-        setUsername('');
-        setPassword('');
         setUser(null);
 
     };
     useEffect(() => {
         let  user = localStorage.getItem('user');
         if (user) {
-            user =JSON.parse(user)
+            user =JSON.parse(user);
         } else {
             user = null;
         }
-        console.log('(*', user)
         setUser(user);
 
         blogService
@@ -169,7 +158,7 @@ function App() {
 
             {user !== null && blogForm(blogs, handleLike, user, handleLogout, handleDelete)}
             {user !== null && getTogglable(handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuthor, newUrl, setNewUrl)}
-            {user === null && loginForm(handleLogin, username, setUsername, password, setPassword)}
+            {user === null && loginForm(handleLogin, username, password)}
 
 
         </div>
