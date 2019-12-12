@@ -54,9 +54,9 @@ const blogForm = (blogs, handleLike, user={}, handleLogout, handleDelete) => {
         </div>
     );
 };
-const getTogglable = (handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuthor, newUrl, setNewUrl) => (
+const getTogglable = (handleSubmit, newTitle, newAuthor, newUrl) => (
     <Togglable buttonLabel="new blog">
-        <AddForm handleSubmit={handleSubmit} newTitle={newTitle} setNewTitle={setNewTitle} newAuthor={newAuthor} setNewAuthor={setNewAuthor} newUrl={newUrl} setNewUrl={setNewUrl}/>
+        <AddForm handleSubmit={handleSubmit} newTitle={newTitle} newAuthor={newAuthor} newUrl={newUrl}/>
     </Togglable>
 
 );
@@ -64,21 +64,21 @@ function App() {
     const [blogs, setBlogs] = useState([]);
     const [user, setUser] = useState(null);
     const username = useField('text');
-    const password = useField('text');
-    const [newTitle, setNewTitle] = useState('');
-    const [newAuthor, setNewAuthor] = useState('');
-    const [newUrl, setNewUrl] = useState('');
+    const password = useField('password');
+    const newTitle = useField('text');
+    const newAuthor = useField('text');
+    const newUrl = useField('text');
     const [error, setError ] = useState(null);
     const [notification, setNotification] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const blgObj = await blogService.createNew({ title: newTitle, author: newAuthor, url: newUrl });
-            setNotification(`A new blog ${newTitle} by ${newAuthor} is added `);
-            setNewTitle('');
-            setNewAuthor('');
-            setNewUrl('');
+            const blgObj = await blogService.createNew({ title: newTitle.value, author: newAuthor.value, url: newUrl.value });
+            setNotification(`A new blog ${newTitle.value} by ${newAuthor.value} is added `);
+            newTitle.reset();
+            newAuthor.reset();
+            newUrl.reset();
             setBlogs([...blogs, blgObj].sort((a, b) => { if (a.likes < b.likes) {return 1; }else{ return -1;}}  ));
             setTimeout(() => {setNotification(null);}, 5000);
 
@@ -96,7 +96,8 @@ function App() {
             const user = await loginService.login({ username: userVal, password: pasVal });
             setUser(user);
             localStorage.setItem('user', JSON.stringify(user));
-
+            username.reset();
+            password.reset();
 
         } catch (exception) {
             setError('user name or password is invalid');
@@ -157,7 +158,7 @@ function App() {
             <Notification message={error} error/>
 
             {user !== null && blogForm(blogs, handleLike, user, handleLogout, handleDelete)}
-            {user !== null && getTogglable(handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuthor, newUrl, setNewUrl)}
+            {user !== null && getTogglable(handleSubmit, newTitle, newAuthor, newUrl)}
             {user === null && loginForm(handleLogin, username, password)}
 
 

@@ -1,18 +1,18 @@
 import React from 'react';
-const AddForm = ({ handleSubmit, newTitle, setNewTitle, newAuthor, setNewAuthor, newUrl, setNewUrl }) => {
+const AddForm = ({ handleSubmit, newTitle, newAuthor,  newUrl }) => {
     return (
         <div>
             <h1>Add New</h1>
             <form onSubmit={ handleSubmit }>
                 <div>
-                    title: <input value={ newTitle } onChange={ (e) => { setNewTitle(e.target.value.trim()); } }/>
+                    title: <input  {...newTitle}/>
                 </div>
                 <div>
-                    author: <input value={ newAuthor } onChange={ (e) => { setNewAuthor(e.target.value.trim()); } }/>
+                    author: <input{...newAuthor }/>
 
                 </div>
                 <div>
-                    url: <input value={ newUrl } onChange={ (e) => { setNewUrl(e.target.value.trim()); } }/>
+                    url: <input {...newUrl}/>
 
                 </div>
 
