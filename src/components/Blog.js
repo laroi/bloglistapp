@@ -5,7 +5,7 @@ const username = JSON.parse(localStorage.getItem('user') || '{"username":""}').u
 const delButton = (inUsername, handleDelete, id, title) => {
 
     if (username === inUsername) {
-        return (<button onClick={ handleDelete(id, title) }>Delete</button>);
+        return (<button onClick={handleDelete(id, title)}>Delete</button>);
     }
     return null;
 };

@@ -3,16 +3,16 @@ const AddForm = ({ handleSubmit, newTitle, newAuthor,  newUrl }) => {
     return (
         <div>
             <h1>Add New</h1>
-            <form onSubmit={ handleSubmit }>
+            <form onSubmit={handleSubmit}>
                 <div>
-                    title: <input  {...newTitle}/>
+                    title: <input  {...newTitle} />
                 </div>
                 <div>
-                    author: <input{...newAuthor }/>
+                    author: <input{...newAuthor} />
 
                 </div>
                 <div>
-                    url: <input {...newUrl}/>
+                    url: <input {...newUrl} />
 
                 </div>
 

@@ -22,6 +22,7 @@ module.exports = {
           "error",
           "unix"
       ],
+      "jsx-no-bind":false,
       "quotes": [
           "error",
           "single"

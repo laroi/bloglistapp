@@ -38,8 +38,8 @@ const Notification = ({ message, error }) => {
         styleObj =  { ...notice, color: 'green' };
     }
     return (
-        <div style={ styleObj }>
-            { message }
+        <div style={styleObj}>
+            {message}
         </div>
     );
 };
@@ -49,14 +49,14 @@ const blogForm = (blogs, handleLike, user={}, handleLogout, handleDelete) => {
     return  (
         <div className="blogs">
             <h2>blogs</h2>
-            <span>{ `${name} logged in` } <button onClick={ handleLogout }>logout</button> </span>
-            { blogs.map(x => <Blog key={ x.id } blog={ x } handleLike={ handleLike } handleDelete={ handleDelete }/>)}
+            <span>{`${name} logged in`} <button onClick={handleLogout}>logout</button> </span>
+            { blogs.map(x => <Blog key={x.id} blog={x} handleLike={handleLike} handleDelete={handleDelete} />) }
         </div>
     );
 };
 const getTogglable = (handleSubmit, newTitle, newAuthor, newUrl) => (
     <Togglable buttonLabel="new blog">
-        <AddForm handleSubmit={handleSubmit} newTitle={newTitle} newAuthor={newAuthor} newUrl={newUrl}/>
+        <AddForm handleSubmit={handleSubmit} newTitle={newTitle} newAuthor={newAuthor} newUrl={newUrl} />
     </Togglable>
 
 );
@@ -154,8 +154,8 @@ function App() {
     }, []);
     return (
         <div className="App">
-            <Notification message={notification}/>
-            <Notification message={error} error/>
+            <Notification message={notification} />
+            <Notification message={error} error />
 
             {user !== null && blogForm(blogs, handleLike, user, handleLogout, handleDelete)}
             {user !== null && getTogglable(handleSubmit, newTitle, newAuthor, newUrl)}
