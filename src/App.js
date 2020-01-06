@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import React, { useState, useEffect } from 'react';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
@@ -6,19 +8,24 @@ import AddForm from './components/AddForm';
 import Togglable from './components/Togglable';
 import  { useField } from './hooks';
 
-const loginForm = (handleLogin, username, password) => (
-    <form className="login" onSubmit={handleLogin}>
-        <div>
-            username
-            <input {...username}  />
-        </div>
-        <div>
-            password
-            <input {...password}  />
-        </div>
-        <button type="submit">login</button>
-    </form>
-);
+const loginForm = (handleLogin, username, password) => {
+    const { reset:userReset, ..._username } = username;
+    const { reset:passReset, ..._password } = password;
+
+    return (
+        <form className="login" onSubmit={handleLogin}>
+            <div>
+                username
+                <input {..._username}  />
+            </div>
+            <div>
+                password
+                <input {..._password}  />
+            </div>
+            <button type="submit">login</button>
+        </form>
+    );
+};
 const Notification = ({ message, error }) => {
     if (message === null) {
         return null;

@@ -22,7 +22,8 @@ module.exports = {
           "error",
           "unix"
       ],
-      "jsx-no-bind":false,
+    "no-unused-vars": [2, {"vars": "all", "varsIgnorePattern": "[iI]gnored"}],
+    "jsx-no-bind":false,
       "quotes": [
           "error",
           "single"
